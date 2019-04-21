@@ -1,4 +1,6 @@
-# monday-metrics
+# Monday Metrics
+
+Super helpful tutorial on the Netlify blog [here](https://www.netlify.com/blog/2018/12/07/gotrue-js---bringing-authentication-to-static-sites-with-just-3kb-of-js/).
 
 ## Project setup
 ```
