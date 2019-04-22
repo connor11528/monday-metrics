@@ -1,18 +1,21 @@
 <template>
-	<div>
+<div class='container'>
+
 	<template v-if="notifications.length > 0">
-      <transition-group name="notification-list" tag="div" class="notifications" appear>
-        <notification
-          appear
-          v-for="(notification, idx) in notifications"
-          :key="idx"
-          :notification="notification"
-        ></notification>
-      </transition-group>
-    </template>
+    <transition-group name="notification-list" tag="div" class="notifications" appear>
+      <notification
+        appear
+        v-for="(notification, idx) in notifications"
+        :key="idx"
+        :notification="notification"
+      ></notification>
+    </transition-group>
+  </template>
+
+  <h1>Login</h1>
 	<form @submit.prevent="login()">
 	  <label>
-	    Username:
+	    Email:
 	    <input type="text" v-model="loginCreds.email">
 	  </label>
 	  <label>
@@ -22,10 +25,10 @@
 	  <button type="submit">Login</button>
 	</form>
 
-
+	<h1>Signup</h1>
 	<form @submit.prevent="signup()">
 	  <label>
-	    Username:
+	    Email:
 	    <input type="text" v-model="signupCreds.email">
 	  </label>
 	  <label>
@@ -35,7 +38,7 @@
 	  <button type="submit">Sign Me Up!</button>
 	</form>
 
-	</div>
+</div>
 </template>
 
 <script>
@@ -79,16 +82,40 @@ export default {
 						password: null
 					};
 	  		})
-	  		.catch(err => console.log(err, "womp womp. Something went wrong."))
+	  		.catch(err => {
+	  			this.addNotification({
+		        title: "Signup Error",
+		        text: err.error_description,
+		        type: "fail"
+		      });
+		      
+	  			console.error(err);
+	  		});
 
 		},
 		login(){
-			this.attemptLogin(this.loginCreds)
+
+			let token = decodeURIComponent(window.location.search)
+        .substring(1)
+        .split("confirmation_token=")[1];
+
+      console.log('your token is ', token);
+
+			this.attemptLogin({ token, ...this.loginCreds })
 	      .then(() => {
 	        this.$router.push(this.$route.query.redirect || "/");
-	        console.log('You have successfully logged in')
+
+	        console.log('You have successfully logged in');
 	      })
-	      .catch(err => console.log(err, "womp womp. Something went wrong."))
+	      .catch(err => {
+	      	this.addNotification({
+		        title: "Login Error",
+		        text: err.error_description,
+		        type: "fail"
+		      });
+
+	  			console.error(err);
+	      })
 		}
 	}
 }

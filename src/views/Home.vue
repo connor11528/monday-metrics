@@ -15,6 +15,17 @@
 
 export default {
   name: 'Home',
+  mounted(){
+  	let token = decodeURIComponent(window.location.search)
+        .substring(1)
+        .split("confirmation_token=")[1];
+
+    console.log(token);
+
+  },
+  data(){
+  	return {}
+  }
 
 }
 </script>
