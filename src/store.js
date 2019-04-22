@@ -81,25 +81,16 @@ export default new Vuex.Store({
 	    });
 	  });
 	},
-	attemptConfirmation({ commit, dispatch }, credentials){
+	attemptConfirmation({ commit, dispatch }, token){
 	  return new Promise((resolve, reject) => {
-	    if (!credentials.token) {
+	    if (!token) {
 	      resolve();
 	      return;
 	    }
 
-	    auth.confirm(credentials.token)
+	    auth.confirm(token)
 	      .then(response => {
-	        credentials.token = null;
-
-	        dispatch("attemptLogin", credentials);
-
-	        console.log(
-	          "Confirmation email sent",
-	          JSON.stringify({
-	            response
-	          })
-	        );
+	        token = null;
 
 	        resolve(response);
 	      })
@@ -115,7 +106,7 @@ export default new Vuex.Store({
 	    auth.signup(credentials.email, credentials.password)
 	      .then(response => {
 	        console.log("Confirmation email sent", response);
-	        
+
 	        commit("TOGGLE_LOAD");
 	        resolve(response);
 	      })

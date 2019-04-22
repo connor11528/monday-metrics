@@ -88,22 +88,19 @@ export default {
 		        text: err.error_description,
 		        type: "fail"
 		      });
-		      
+
 	  			console.error(err);
 	  		});
 
 		},
 		login(){
 
-			let token = decodeURIComponent(window.location.search)
-        .substring(1)
+			let token = decodeURIComponent(window.location.hash.substr(1))
         .split("confirmation_token=")[1];
-
-      console.log('your token is ', token);
 
 			this.attemptLogin({ token, ...this.loginCreds })
 	      .then(() => {
-	        this.$router.push(this.$route.query.redirect || "/");
+	        this.$router.push(this.$route.query.redirect || "/dashboard");
 
 	        console.log('You have successfully logged in');
 	      })

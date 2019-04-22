@@ -11,20 +11,33 @@
 </template>
 
 <script>
-
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Home',
   mounted(){
-  	let token = decodeURIComponent(window.location.search)
-        .substring(1)
-        .split("confirmation_token=")[1];
 
-    console.log(token);
+    if (window.location.hash && window.location.hash.indexOf('#confirmation_token=') === 0) {
+	    const token = window.location.hash.replace('#confirmation_token=', '');
+
+	    console.log('Got the token: ', token);
+
+	    this.attemptConfirmation(token)
+			  .then(user => {
+			  	console.log('User confirmed! ', user);
+			  	window.location.href = '/';
+			  },error => {
+			  	console.error("Failed to log in: %o", error)
+			  });
+	}
 
   },
   data(){
   	return {}
+  },
+  methods:{
+  	...mapActions(["attemptConfirmation"]),
+
   }
 
 }
